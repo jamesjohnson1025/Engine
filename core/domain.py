@@ -38,11 +38,19 @@ class Domain(object):
     def _fetch_details_by_word(self,word):
 	return self._service._fetch_record_by_word(word)
    
+    
+ 
     def _build_index(self):
 
-	fn = lambda row:self._pre_processing._action(row)
+	fn = lambda row: row['HEADLINE']+' '+row['TEXT'] 
+	
+	_combined_cols = self._apply_preprocessing(['HEADLINE','TEXT'],fn)
 
-	docs_tokenized = self._apply_preprocessing('TEXT',fn)
+	self._service._add_column('RAW_TEXT',_combined_cols)
+
+	fn = lambda row:self._pre_processing._action(row)
+	
+	docs_tokenized = self._apply_preprocessing('RAW_TEXT',fn)
 		
 	doc_ids = self._service._fetch_column('DOCID')
 

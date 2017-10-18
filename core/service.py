@@ -29,4 +29,6 @@ class Service(object):
 
     def _get_sFrame_data(self):
 	return self._gl if self._gl is not None else None
-
+    
+    def _add_column(self,column_name,data):
+	self._gl.add_column(data,name=column_name) 
