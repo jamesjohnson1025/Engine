@@ -8,7 +8,7 @@ main = Domain()
 
 doc = Document()
 
-docs = doc._registerInstances()._getInstance('XML').parse('data2.xml')
+docs = doc._registerInstances()._getInstance('XML').parse('data4.xml')
 
 main_service =  main._add_documents_to_gl(docs)
 
@@ -24,9 +24,9 @@ _build_positional_output(termInverted,'Inverted')
 
 #_pretty_print(pos_main._doc_search('scotland','WS'))
 
-print pos_main._doc_search('sash AND trocadero','BS')
+print pos_main._doc_search('edinburgh and scotland','BS')
 
-print main._doc_details(3826)
+#print main._doc_details(3826)
 
 
 

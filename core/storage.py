@@ -4,9 +4,9 @@ import graphlab as gl
 class Storage(object):
 
     def __init__(self,glab = gl):
-	self._gl = glab
-        self._pos_gl = glab
-        self._data = None
+	   self._gl = glab
+       self._pos_gl = glab
+       self._data = None
 
     def _getGraphLab(self):
 	return self._gl
