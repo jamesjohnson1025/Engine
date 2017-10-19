@@ -32,3 +32,6 @@ class Service(object):
     
     def _add_column(self,column_name,data):
 	self._gl.add_column(data,name=column_name) 
+
+    def _get_service(self):
+	return self

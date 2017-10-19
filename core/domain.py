@@ -1,7 +1,7 @@
 from preprocessing import Preprocessing
 from service import Service
 from collections import defaultdict
-
+from search import Search
 
 class Domain(object):
 
@@ -9,7 +9,7 @@ class Domain(object):
         self._service = Service()
 	self._pre_processing = Preprocessing()
 	self._cache_term = defaultdict(dict)	
-
+	self._search = None
 
     def _update_term(self,index,term,docId):
 	if self._cache_term.get(term,False):
@@ -66,6 +66,14 @@ class Domain(object):
     def _build_positional_inverted_term(self):
 	return self._service._get_sFrame_data()
 
-
-		
-
+    
+    def _doc_search(self,term,search_type):
+	
+	if self._search ==  None:
+	    service = self._service._get_service()
+	    self._search = Search(service)	
+	return self._search._parse(term,search_type)
+   		
+    def _doc_details(self,_doc_id):
+	
+	return self._service._fetch_record_by_docid(str(_doc_id))

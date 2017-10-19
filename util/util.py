@@ -29,7 +29,13 @@ def _build_positional_output(_data,_fName):
                 f.write('\n\t'+eDoc+':'+_space+'(tf:'+str(len(ePos))+')'+','.join(map(str,map(int,ePos))))
             f.write('\n')
 		
-	    
+def _pretty_print(_data):    
+   
+    print('\n Term \n \t'+_data['WORD'][0]+'\n')
+    for (doc,positions) in _data['INFO'][0].iteritems():
+        _positions = ','.join(map(str,map(int,positions)))
+	print ('\tDocument #%s - %s'%(doc,_positions))
+
 	
 	
 
