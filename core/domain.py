@@ -71,7 +71,12 @@ class Domain(object):
     def _build_positional_inverted_term(self):
 	    
         return self._service._get_sFrame_data()
+    
+    def _fetch_column(self,colName):
+        return self._service._fetch_column(colName)
 
+    def _fetch_records(self,filters,col_name):
+        return self._service._fetch_records(filters,col_name)
     
     def _doc_search(self,term,search_type,distance):
 	

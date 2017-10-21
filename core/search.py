@@ -23,11 +23,9 @@ class Search(object):
         elif search_type == 'PH' :
             return self._phrase_search(term,1)
         elif search_type == 'PX' :
-            _exp = re.compile(r'\s?#\s?(\d+)\s?\(\s?([a-z]+)\s?,\s?([a-z]+)\s?\)\s?$')
-
-            result = _exp.search(term).groups()
-            term = "'"+result[1]+' '+result[2]+"'"
-            return self._phrase_search(term,result[0])
+            _term = re.compile(r'\s?#\s?(\d+)\s?\(\s?([a-z]+)\s?,\s?([a-z]+)\s?\)\s?$').search(term).groups()
+            term = "'"+_term[0]+' '+_term[1]+"'"
+            return self._phrase_search(term,_term[2])
 
     def _get_word(self,term):
 
@@ -37,17 +35,17 @@ class Search(object):
             return False
     
     def _word_search(self,term):
-                
+        
         _term = self._preprocess_search(term)
         record = self._get_word(_term)
     	
         if not record:
     	   print('No documents on this term %s'%(term))
            return
-        return record
+        return list(record[0]['INFO'])
     
     def _phrase_search(self,phrase,distance):
-         
+        
         fn = map(str,map(lambda x:x.strip('\"\''),phrase.split(' ')))                    
 
         _split = filter(re.compile(r'\w+').search,fn)
@@ -65,7 +63,6 @@ class Search(object):
        _rdocs = rrecord['INFO']
 
        _rsult_docs =  self._common_documents(_ldocs,_rdocs) 
-       
        _rsult_phrase = []
 
        for _docIdx in _rsult_docs:
@@ -79,7 +76,7 @@ class Search(object):
         
         _combinations = product(llist,rlist)
 
-        _result = filter(lambda term: abs(term[0] - term[1]) == distance, _combinations)
+        _result = filter(lambda term: abs(term[0] - term[1]) <= distance, _combinations)
 
         return (True if len(_result) > 0 else False,docIdx)  
     

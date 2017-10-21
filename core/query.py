@@ -1,7 +1,7 @@
-from os import path
 from nltk.stem import PorterStemmer as ps
+from os import path
 import shlex
-
+import re
 
 class Query(object):
 
@@ -65,26 +65,62 @@ class Query(object):
         
         for query in _queries:
             self._make_query(query)
+    
+    def _find_not_in_term(self,term):
 
-    def _is_query_NOT(self,)
+        _proximity_query = re.compile(r'(.?)\s?#\s?(\d+)\s?\(\s?([a-z]+)\s?,\s?([a-z]+)\s?\)\s?$')
 
-        
+        if _proximity_query.match(term):
+            
+            _tmp = _proximity_query.search(term).groups()
+            _text = '#'+_tmp[1]+'('+_tmp[2]+','+_tmp[3]+')' 
+            _w_string = _tmp[0]+' '+_text
+
+            if 'NOT' in shlex.split(_w_string):
+                return (_text,True)
+            return(_text,False)
+        else:
+            _flag = True if term.find('"') is not -1 else False
+
+            _w_string = shlex.split(term)
+           
+            _quotes = '"'
+            if 'NOT' in _w_string:
+                return (_quotes+_w_string[1]+_quotes if _flag else _w_string[1],True)
+            else:
+                return (_quotes+_w_string[0]+_quotes if _flag else _w_string[0],False) 
+           
+         
+
     def _make_query(self,query):
-        _ps = ps()
+        
+        _ps = ps()        
         sub_queries = shlex.split(query)
-        if 'AND' in sub_queries:       
-            fn = lambda word:word.lower()
-            _query = map(fn,query.split('AND',1))
-            self.enqueue({'lterm' :_query[0],'operator' :'AND','rterm' :_query[1]})
-            #if 'NOT' in sub_queries:
-            #    _query = map(fn,query.split('AND NOT',1))
 
-            #    self.enqueue({'lterm' :_query[0],'operator' :'AND NOT','rterm' :_query[1]})
-            #else:
-        elif query[0] == '#' and 'AND' not in sub_queries:
-            self.enqueue({'lterm' :'"'+sub_queries[0]+'"'})
+        _and_query =  re.compile(r'(.+)(\bAND\b|\bOR\b)(.+)')
+        _hash_query = re.compile(r'\s?#\s?(\d+)\s?\(\s?([a-z]+)\s?,\s?([a-z]+)\s?\)\s?$')
+        
+        if _and_query.match(query):
+            
+            _result = _and_query.search(query).groups()  
+                
+            _lterm,lflag = self._find_not_in_term(_result[0])
+
+            _rterm,rflag = self._find_not_in_term(_result[2])
+
+            self.enqueue({'lterm' :_lterm.lower(),'operator':_result[1],'rterm' :_rterm.lower(),'lflag':lflag,'rflag':rflag})
+
+        elif _hash_query.match(query):
+                
+            _result =  _hash_query.search(query).groups()
+            term = '#'+_result[0]+'('+_result[1].lower()+','+_result[2].lower()+')'
+            self.enqueue({'lterm' :term})
         elif len(sub_queries) == 1:
             fn = lambda word:word.lower()
             sub_queries = map(fn,sub_queries)
-            self.enqueue({'lterm' :'"'+sub_queries[0]+'"'})
+            _quotes = '"'
+            if len(sub_queries[0].split(' ')) > 1:
+                self.enqueue({'lterm' :_quotes+sub_queries[0]+_quotes})
+            else:
+                self.enqueue({'lterm':sub_queries[0]})
             

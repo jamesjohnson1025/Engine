@@ -1,6 +1,5 @@
 from os import path
 
-
 class Stopwords(object):
 
      def __init__(self):

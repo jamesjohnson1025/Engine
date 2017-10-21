@@ -9,9 +9,13 @@ def _save_to_file(_fName,_data):
     
     _fName = _get_location(_fName)
     
+    _enumerated_docs = enumerate(_data)
+
     with open(_fName,'wb') as f:
-	for eRow in _data:
-		pass
+        for i,docs in _enumerated_docs:
+            for idx in docs:
+                f.write('\n{0} {1} {2} {3} {4} {5}'.format(i,0,idx,0,1,0))
+		
 
 
 
@@ -36,8 +40,7 @@ def _pretty_print(_data):
         _positions = ','.join(map(str,map(int,positions)))
 	print ('\tDocument #%s - %s'%(doc,_positions))
 
-	
-	
+
 
 
     

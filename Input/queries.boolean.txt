@@ -8,4 +8,4 @@
 8 "Financial times" AND NOT BBC
 9 "wall street" AND "dow jones"
 10 #15(dow,stocks)
-11 #20(income, taxes) AND "middle east" 
+11 #20(income, taxes) AND "middle east"
