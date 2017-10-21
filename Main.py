@@ -1,7 +1,7 @@
 from core.domain import Domain
+from core.queryexecuter import QueryExecuter
 from document.Document  import Document 
 from util.util import _build_positional_output,_pretty_print
-
 
 main = Domain()
 
@@ -20,13 +20,19 @@ pos_main._add_terms_to_gl(_db)
 
 termInverted = pos_main._build_positional_inverted_term()
 
-_build_positional_output(termInverted,'Inverted')
+#_build_positional_output(termInverted,'Inverted')
 
-#_pretty_print(pos_main._doc_search('scotland','WS'))
+#print pos_main._doc_search('middl','WD',1)
 
-print pos_main._doc_search('edinburgh and scotland','BS')
 
 #print main._doc_details(3826)
+
+
+qy = QueryExecuter('queries.boolean',pos_main)
+
+queries = qy._parse_queries()
+
+#print qy._get_queries()
 
 
 

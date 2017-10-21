@@ -73,13 +73,15 @@ class Domain(object):
         return self._service._get_sFrame_data()
 
     
-    def _doc_search(self,term,search_type):
+    def _doc_search(self,term,search_type,distance):
 	
     	if self._search ==  None:
 	        service = self._service._get_service()
 	        self._search = Search(service)	
-    	return self._search._parse(term,search_type)
-   		
+    	return self._search._parse(term,search_type,distance)
+   	
+    
+
     def _doc_details(self,_doc_id):
 	
 	    return self._service._fetch_record_by_docid(str(_doc_id))

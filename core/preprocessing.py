@@ -19,7 +19,7 @@ class Preprocessing(object):
         return map(lambda word: self.pStemmer.stem(word),row)
 
     def _tokenize(self,row):
-        return filter(lambda word:re.match("^[\w]+$",word),[word for word in re.split("[\s:/,.:]",row)])
+        return filter(lambda word:re.match("^[\w]+$",word),[word for word in re.split("[\W+]",row)])
 
     def _rmove_stopWords(self,row):
         return [word for word in row if word not in self._stopWords ]
