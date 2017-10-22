@@ -39,11 +39,8 @@ class RankExecuter(object):
 
             for query in queries:
                 row = self._preprocess._action(query)
-                print 'row',row
-                result = self._execute_query(row)
-                results.append(result)
-
-            return results
+                results.append(self._execute_query(row))
+        return results
 
 
 
@@ -52,7 +49,6 @@ class RankExecuter(object):
         query = map(str,query)
 
         records = self._domain._fetch_records(query,'WORD')
-
         docs  = set()
 
         records_size = len(records)
@@ -69,7 +65,7 @@ class RankExecuter(object):
                     score = score + ((1 + math.log10(tf))*(math.log10(float(N)/float(1+df))))
             _query_document.append((edoc,score))
 
-        return sorted(_query_document,key=lambda x:x[1],reverse=True)
+        return sorted(_query_document,key=lambda x:x[1],reverse=True)[:1000]
 
 
 
