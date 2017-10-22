@@ -1,7 +1,7 @@
 from core.domain import Domain
 from core.queryexecuter import QueryExecuter
-from document.Document  import Document 
-from util.util import _build_positional_output,_pretty_print,_save_to_file
+from document.Document  import Document
+from util.util import _build_positional_output,_pretty_print,_save_boolean_to_file,_save_ranked_to_file
 from core.rankexecuter import RankExecuter
 
 main = Domain()
@@ -9,7 +9,7 @@ main = Domain()
 
 doc = Document()
 
-docs = doc._registerInstances()._getInstance('XML').parse('data4.xml')
+docs = doc._registerInstances()._getInstance('XML').parse('trec.5000.xml')
 
 main_service =  main._add_documents_to_gl(docs)
 
@@ -25,21 +25,25 @@ termInverted = pos_main._build_positional_inverted_term()
 
 #_build_positional_output(termInverted,'Inverted')
 
-#print pos_main._doc_search('middl','WD',1)
+#print pos_main._doc_search('','WD',1)
 
 
 #print main._doc_details(3826)
 
-'''
+
 qy = QueryExecuter('queries.boolean',pos_main)
 
 results = qy._parse_queries(wCollection)
 
-_save_to_file('results_final',results)
-'''
+print 'results',results
 
-qy = RankExecuter(pos_main)
-qy._parse('queries.ranked')
+_save_boolean_to_file('results_final',results)
+
+
+rk = RankExecuter(pos_main)
+results = rk._parse('queries.ranked')
+
+_save_ranked_to_file('results.ranked.txt',results)
 
 
 

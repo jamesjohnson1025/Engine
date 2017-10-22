@@ -1,5 +1,5 @@
 from query import Query
-from boperator import Operator 
+from boperator import Operator
 from os import path
 
 class QueryExecuter(Query):
@@ -11,7 +11,7 @@ class QueryExecuter(Query):
         self._query = None
 
     def _identify_query(self,term):
-        
+
         term = term.strip(' ')
         if term[0] == '"' :
             return 'PH'
@@ -20,11 +20,11 @@ class QueryExecuter(Query):
         else:
             return 'WD'
 
-            
-    def _parse_queries(self,wCollection=None,ofName='firstOutput'):        
+
+    def _parse_queries(self,wCollection=None,ofName='firstOutput'):
 
         self._query = super(QueryExecuter,self)._parse(self._fName)
-        
+
         _save_to_file = []
 
         while not self._query.isEmpty():
@@ -45,33 +45,33 @@ class QueryExecuter(Query):
                 _rtresults = self._execute_not(list(wCollection),_rtresults,_query_dict['rflag'])
                 _save_to_file.append(sorted(self._execute_operator(_query_dict['operator'],_ltresults,_rtresults)))
         return _save_to_file
-                                                      
-     
+
+
     def _get_queries(self):
         return self._query._print_queries()
 
     def _execute_query(self,term,qtype,distance=1):
-        
+
         return self._domain._doc_search(term,qtype,distance)
-     
+
     def _execute_not(self,wCollection,tCollection,flag):
-        
+
         op = Operator()
 
         if flag:
             return op._parse(wCollection,tCollection,'NOT')
-        
+
         return tCollection
-            
+
     def _execute_operator(self,operator,ltresults,rtresults):
-        
+
         op = Operator()
         return op._parse(ltresults,rtresults,operator)
-        
-    
 
 
-               
+
+
+
 
 
 
