@@ -1,6 +1,11 @@
+import re
 from stopwords import Stopwords as sW
 from nltk.stem import PorterStemmer
-import re
+
+"""
+This class takes a row and traverse through methods action,stemming,tokenize,remove_words and the
+resultant is set of pruned tokens
+"""
 
 
 class Preprocessing(object):
@@ -22,5 +27,5 @@ class Preprocessing(object):
         return filter(lambda word:re.match("^[\w]+$",word),[word for word in re.split("[\W+]",row)])
 
     def _rmove_stopWords(self,row):
-        return [word for word in row if word not in self._stopWords ]
+        return [word for word in row if word not in self._stopWords]
 
